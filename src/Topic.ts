@@ -1,5 +1,5 @@
 export class Topic<T> {
-    private name: string;
+    name: string;
     private queue: T[];
 
     constructor(name: string) {
