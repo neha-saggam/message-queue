@@ -13,10 +13,20 @@ export class Broker<T> {
             throw new Error("No topic name found");
         }
         filteredTopic.enqueue(payload);
+        this.processRequest(filteredTopic);
     }
 
     getTopics() {
         return this.topics;
+    }
+
+    processRequest(filteredTopic: Topic<T>) {
+        const payload = filteredTopic.dequeue();
+        if(payload) {
+            filteredTopic.getSubscribers().forEach((subscriber: Subscriber<T>) => {
+                return subscriber.onMessage(payload);
+            });
+        }
     }
 
     subscribe(subscriber: Subscriber<T>, topicName: string) {
