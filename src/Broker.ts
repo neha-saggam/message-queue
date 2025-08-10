@@ -1,4 +1,5 @@
 import {Topic} from "./Topic";
+import {Subscriber} from "./Subscriber";
 
 export class Broker<T> {
     private readonly topics: Topic<T>[];
@@ -16,5 +17,13 @@ export class Broker<T> {
 
     getTopics() {
         return this.topics;
+    }
+
+    subscribe(subscriber: Subscriber<T>, topicName: string) {
+        const filteredTopic = this.topics.find((topic) => topic.name === topicName);
+        if(!filteredTopic) {
+            throw new Error("No topic name found");
+        }
+        filteredTopic.addSubscriber(subscriber);
     }
 }
